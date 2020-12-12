@@ -1,0 +1,73 @@
+﻿@model AuctionInterface_Sellers.Models.Auction
+@using AuctionInterface_Sellers.CustomHtmlHelpers;
+@using AuctionInterface_Sellers.Models;
+
+@{
+
+    ViewBag.Title = "AuctionForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int auctionerrId = ViewBag.auctioneerId;
+}
+
+<h2>Fill your Auction Form</h2>
+
+@using (Html.BeginForm("CreateAuction", "Auctioneer"))
+{
+    @Html.AntiForgeryToken()
+
+    <h4>Auction stats</h4>
+
+    <div class="form-group">
+        @Html.Hidden("auctioneerId", value: auctionerrId)
+    </div>
+
+
+    <div class="form-group">
+        @Html.DropDownList("metal_Type",
+                EnumHelper.GetSelectList(typeof(Metal_Type)),
+                "Select Metal Type",
+                new { @class = "form-control" })
+
+
+    </div>
+
+    <div class="form-group">
+        Amount:
+        @Html.TextBox("amount")
+        @Html.ValidationMessageFor(model => model.Amount, "Must be a number", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        Starting price:
+        @Html.TextBox("startingPrice")
+        @Html.ValidationMessageFor(model => model.StartingPrice, "Must be a number", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        Minimum bid increment:
+        @Html.TextBox("minimumBidIncrement")
+        @Html.ValidationMessageFor(model => model.MinimunBidIncrease, "Must be a number", new { @class = "text-danger" })
+    </div>
+
+   
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.LabelFor(model => model.ClosingTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DatePicker("closingTime")
+            @Html.ValidationMessageFor(model => model.ClosingTime, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-10">
+           pick closing time:
+            Hour: @Html.TextBox("endHour")
+            Minute: @Html.TextBox("endMinute")
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create Auction" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+}
+

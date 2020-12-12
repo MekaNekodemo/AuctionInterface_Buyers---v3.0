@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Auction_DBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Auction_DBModelStoreContainer">
+    <EntitySet Name="Accounts" EntityType="Auction_DBModel.Store.Accounts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Auctions" EntityType="Auction_DBModel.Store.Auctions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Bids" EntityType="Auction_DBModel.Store.Bids" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AccountBid" Association="Auction_DBModel.Store.FK_AccountBid">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Bids" EntitySet="Bids" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AuctionAccount" Association="Auction_DBModel.Store.FK_AuctionAccount">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Auctions" EntitySet="Auctions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AuctionAccount1" Association="Auction_DBModel.Store.FK_AuctionAccount1">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Auctions" EntitySet="Auctions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BidAuction" Association="Auction_DBModel.Store.FK_BidAuction">
+      <End Role="Auctions" EntitySet="Auctions" />
+      <End Role="Bids" EntitySet="Bids" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Auctions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Amount" Type="float" Nullable="false" />
+    <Property Name="Metal" Type="int" Nullable="false" />
+    <Property Name="StartingPrice" Type="float" Nullable="false" />
+    <Property Name="MinimunBidIncrease" Type="float" Nullable="false" />
+    <Property Name="StartTime" Type="datetime" Nullable="false" />
+    <Property Name="ClosingTime" Type="datetime" Nullable="false" />
+    <Property Name="State" Type="int" Nullable="false" />
+    <Property Name="OwnerAccountId" Type="int" Nullable="false" />
+    <Property Name="WinnerAccountId" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Bids">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Amount" Type="decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="State" Type="int" Nullable="false" />
+    <Property Name="OwnerAccountId" Type="int" Nullable="false" />
+    <Property Name="AuctionId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AccountBid">
+    <End Role="Accounts" Type="Auction_DBModel.Store.Accounts" Multiplicity="1" />
+    <End Role="Bids" Type="Auction_DBModel.Store.Bids" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Bids">
+        <PropertyRef Name="OwnerAccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AuctionAccount">
+    <End Role="Accounts" Type="Auction_DBModel.Store.Accounts" Multiplicity="1" />
+    <End Role="Auctions" Type="Auction_DBModel.Store.Auctions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Auctions">
+        <PropertyRef Name="OwnerAccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AuctionAccount1">
+    <End Role="Accounts" Type="Auction_DBModel.Store.Accounts" Multiplicity="0..1" />
+    <End Role="Auctions" Type="Auction_DBModel.Store.Auctions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Auctions">
+        <PropertyRef Name="WinnerAccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BidAuction">
+    <End Role="Auctions" Type="Auction_DBModel.Store.Auctions" Multiplicity="1" />
+    <End Role="Bids" Type="Auction_DBModel.Store.Bids" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Auctions">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Bids">
+        <PropertyRef Name="AuctionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Auction_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bids" Relationship="Self.FK_AccountBid" FromRole="Accounts" ToRole="Bids" />
+          <NavigationProperty Name="AuctionsOwned" Relationship="Self.FK_AuctionAccount" FromRole="Accounts" ToRole="Auctions" />
+          <NavigationProperty Name="AuctionsWon" Relationship="Self.FK_AuctionAccount1" FromRole="Accounts" ToRole="Auctions" />
+        </EntityType>
+        <EntityType Name="Auction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Metal" Type="Auction_DBModel.Metal_Type" Nullable="false" />
+          <Property Name="StartingPrice" Type="Double" Nullable="false" />
+          <Property Name="MinimunBidIncrease" Type="Double" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ClosingTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="State" Type="Auction_DBModel.Auction_State" Nullable="false" />
+          <Property Name="OwnerAccountId" Type="Int32" Nullable="false" />
+          <Property Name="WinnerAccountId" Type="Int32" />
+          <NavigationProperty Name="OwnerAccount" Relationship="Self.FK_AuctionAccount" FromRole="Auctions" ToRole="Accounts" />
+          <NavigationProperty Name="WinnerAccount" Relationship="Self.FK_AuctionAccount1" FromRole="Auctions" ToRole="Accounts" />
+          <NavigationProperty Name="Bids" Relationship="Self.FK_BidAuction" FromRole="Auctions" ToRole="Bids" />
+        </EntityType>
+        <EntityType Name="Bid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="State" Type="Auction_DBModel.Bid_State" Nullable="false" />
+          <Property Name="OwnerAccountId" Type="Int32" Nullable="false" />
+          <Property Name="AuctionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_AccountBid" FromRole="Bids" ToRole="Accounts" />
+          <NavigationProperty Name="Auction" Relationship="Self.FK_BidAuction" FromRole="Bids" ToRole="Auctions" />
+        </EntityType>
+        <Association Name="FK_AccountBid">
+          <End Role="Accounts" Type="Self.Account" Multiplicity="1" />
+          <End Role="Bids" Type="Self.Bid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bids">
+              <PropertyRef Name="OwnerAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AuctionAccount">
+          <End Role="Accounts" Type="Self.Account" Multiplicity="1" />
+          <End Role="Auctions" Type="Self.Auction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Auctions">
+              <PropertyRef Name="OwnerAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AuctionAccount1">
+          <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Auctions" Type="Self.Auction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Auctions">
+              <PropertyRef Name="WinnerAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BidAuction">
+          <End Role="Auctions" Type="Self.Auction" Multiplicity="1" />
+          <End Role="Bids" Type="Self.Bid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Auctions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bids">
+              <PropertyRef Name="AuctionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Auction_DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Auctions" EntityType="Self.Auction" />
+          <EntitySet Name="Bids" EntityType="Self.Bid" />
+          <AssociationSet Name="FK_AccountBid" Association="Self.FK_AccountBid">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Bids" EntitySet="Bids" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AuctionAccount" Association="Self.FK_AuctionAccount">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Auctions" EntitySet="Auctions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AuctionAccount1" Association="Self.FK_AuctionAccount1">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Auctions" EntitySet="Auctions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BidAuction" Association="Self.FK_BidAuction">
+            <End Role="Auctions" EntitySet="Auctions" />
+            <End Role="Bids" EntitySet="Bids" />
+          </AssociationSet>
+        </EntityContainer>
+        <EnumType Name="Metal_Type" >
+          <Member Name="Silver" />
+          <Member Name="Gold" />
+          <Member Name="Platinum" />
+          <Member Name="Palladium" />
+        </EnumType>
+        <EnumType Name="Bid_State" >
+          <Member Name="Leading" />
+          <Member Name="Won" />
+          <Member Name="Trailing" />
+          <Member Name="Lost" />
+        </EnumType>
+        <EnumType Name="Auction_State" >
+          <Member Name="Open" />
+          <Member Name="Pending" />
+          <Member Name="Closed" />
+        </EnumType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Auction_DBModelStoreContainer" CdmEntityContainer="Auction_DBEntities">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="IsTypeOf(Auction_DBModel.Account)">
+        <MappingFragment StoreEntitySet="Accounts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Auctions">
+      <EntityTypeMapping TypeName="IsTypeOf(Auction_DBModel.Auction)">
+        <MappingFragment StoreEntitySet="Auctions">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Metal" ColumnName="Metal" />
+          <ScalarProperty Name="StartingPrice" ColumnName="StartingPrice" />
+          <ScalarProperty Name="MinimunBidIncrease" ColumnName="MinimunBidIncrease" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ClosingTime" ColumnName="ClosingTime" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="OwnerAccountId" ColumnName="OwnerAccountId" />
+          <ScalarProperty Name="WinnerAccountId" ColumnName="WinnerAccountId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bids">
+      <EntityTypeMapping TypeName="IsTypeOf(Auction_DBModel.Bid)">
+        <MappingFragment StoreEntitySet="Bids">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="OwnerAccountId" ColumnName="OwnerAccountId" />
+          <ScalarProperty Name="AuctionId" ColumnName="AuctionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

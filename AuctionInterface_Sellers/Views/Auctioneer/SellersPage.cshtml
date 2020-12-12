@@ -1,0 +1,97 @@
+﻿@using AuctionInterface_Sellers.Models;
+@{
+    ViewBag.Title = "SellersPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Account account = ViewBag.Account;
+    List<Auction> auctions = ViewBag.AllAuctions;
+    List<Bid> bids = ViewBag.AllBids;
+
+
+
+}
+
+<h2>@account.Name's Page</h2>
+
+
+@using (Html.BeginForm("AuctionForm", "Auctioneer"))
+{
+    <div class="form-group">
+        @Html.Hidden("auctioneerId", value: account.Id)
+    </div>
+    <div class="buttons">
+        <div class="form-group">
+            <div class="col-md-10">
+
+                <input type="submit" value="Crate an Auction" class="btn btn-secondary" />
+
+                <h2>All Auctions</h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<table class="table" cellpadding="0" cellspacing="0">
+
+    <tr>
+        <th>Amount</th>
+        <th>Metal</th>
+        <th>Status</th>
+        <th>Closing date</th>
+        <th>Top bid</th>
+
+    </tr>
+
+    @* TODO: Clean up *@
+    @foreach (Auction auction in auctions)
+    {
+        string topBid;
+
+        List<Bid> currenAuctionsBidsList = new List<Bid>();
+
+        foreach (Bid bid in bids)
+        {
+            if (bid.AuctionId == auction.Id)
+            {
+                currenAuctionsBidsList.Add(bid);
+            };
+        }
+
+        currenAuctionsBidsList.Sort();
+
+        if(currenAuctionsBidsList.Count == 0)
+        {
+            topBid = "no bids!";
+        }
+        else
+        {
+            topBid = currenAuctionsBidsList.First().Amount.ToString();
+        }
+
+
+        string rowStyle;
+
+        if (auction.OwnerAccountId == account.Id)
+        {
+
+            rowStyle = "background-color: forestgreen";
+
+        }
+        else
+        {
+            rowStyle = "";
+        }
+
+        <tr style="@rowStyle">
+
+            <td>@auction.Amount g</td>
+            <td>@auction.Metal.ToString()</td>
+            <td>@auction.State</td>
+            <td>@auction.ClosingTime.ToString() </td>
+            <td>@topBid</td>
+
+
+
+        </tr>
+    }
+</table>
